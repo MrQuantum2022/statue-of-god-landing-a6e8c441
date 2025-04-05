@@ -10,9 +10,8 @@ export default defineConfig(({ mode }) => ({
     host: "::",
     port: 8080,
   },
-  // For GitHub Pages deployment, you need to specify the base path as the repository name
-  // Change 'your-repo-name' to your actual repository name when deploying
-  base: mode === 'production' ? '/your-repo-name/' : '/',
+  // For GitHub Pages deployment with your repository name
+  base: mode === 'production' ? '/tushar-cosplay/' : '/',
   plugins: [
     react(),
     mode === 'development' &&
