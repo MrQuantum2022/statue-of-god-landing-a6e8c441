@@ -1,4 +1,3 @@
-
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
@@ -10,8 +9,6 @@ export default defineConfig(({ mode }) => ({
     host: "::",
     port: 8080,
   },
-  // For GitHub Pages deployment with your repository name
-  base: mode === 'production' ? '/tushar-cosplay/' : '/',
   plugins: [
     react(),
     mode === 'development' &&
