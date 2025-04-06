@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -24,7 +23,7 @@ type FormValues = z.infer<typeof formSchema>;
 const ContactSection = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
-  
+
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -37,34 +36,54 @@ const ContactSection = () => {
 
   const onSubmit = async (data: FormValues) => {
     setIsSubmitting(true);
-    
-    // Simulate form submission
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    toast({
-      title: "Message sent!",
-      description: "Thank you for your inquiry. I'll get back to you soon.",
-      variant: "default",
-    });
-    
-    form.reset();
+
+    try {
+      const response = await fetch("https://formspree.io/f/yourFormID", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        toast({
+          title: "Message sent!",
+          description: "Thank you for your inquiry. I'll get back to you soon.",
+          variant: "default",
+        });
+        form.reset();
+      } else {
+        toast({
+          title: "Something went wrong.",
+          description: "Please try again later.",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Network Error",
+        description: "Please check your internet connection and try again.",
+        variant: "destructive",
+      });
+    }
+
     setIsSubmitting(false);
   };
 
   return (
     <section id="contact" className="py-20 bg-gradient-to-b from-solo-dark to-black relative overflow-hidden">
-      {/* Decorative elements */}
       <div className="absolute top-0 left-0 w-full h-20 bg-gradient-to-b from-solo-dark to-transparent"></div>
       <div className="absolute -top-40 -right-40 w-80 h-80 bg-solo-red/5 rounded-full blur-3xl"></div>
       <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-solo-blue/5 rounded-full blur-3xl"></div>
-      
+
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-display font-bold red-gradient inline-block mb-4">CONTACT ME</h2>
           <div className="w-20 h-1 bg-solo-red mx-auto mb-8"></div>
           <p className="text-gray-300 max-w-2xl mx-auto">Interested in my services? Fill out the form below to get in touch.</p>
         </div>
-        
+
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2">
             <Card className="glass-card border-white/10 shadow-xl">
@@ -92,7 +111,7 @@ const ContactSection = () => {
                           </FormItem>
                         )}
                       />
-                      
+
                       <FormField
                         control={form.control}
                         name="email"
@@ -111,7 +130,7 @@ const ContactSection = () => {
                         )}
                       />
                     </div>
-                    
+
                     <FormField
                       control={form.control}
                       name="service"
@@ -135,7 +154,7 @@ const ContactSection = () => {
                         </FormItem>
                       )}
                     />
-                    
+
                     <FormField
                       control={form.control}
                       name="message"
@@ -153,9 +172,9 @@ const ContactSection = () => {
                         </FormItem>
                       )}
                     />
-                    
-                    <Button 
-                      type="submit" 
+
+                    <Button
+                      type="submit"
                       className="w-full bg-solo-red hover:bg-solo-red/80 text-white"
                       disabled={isSubmitting}
                     >
@@ -176,7 +195,7 @@ const ContactSection = () => {
               </CardContent>
             </Card>
           </div>
-          
+
           <div>
             <Card className="glass-card border-white/10 shadow-xl h-full">
               <CardHeader>
@@ -192,22 +211,22 @@ const ContactSection = () => {
                     tusharkashyap877@gmail.com
                   </a>
                 </div>
-                
+
                 <div>
                   <h3 className="text-white font-medium mb-2 flex items-center gap-2">
                     <Instagram className="h-5 w-5 text-solo-red" />
                     Instagram
                   </h3>
-                  <a 
-                    href="https://www.instagram.com/digitally__artistic_/" 
-                    target="_blank" 
+                  <a
+                    href="https://www.instagram.com/digitally__artistic_/"
+                    target="_blank"
                     rel="noopener noreferrer"
                     className="text-gray-300 hover:text-white transition-colors"
                   >
                     @digitally__artistic_
                   </a>
                 </div>
-                
+
                 <div className="pt-6 border-t border-white/10">
                   <h3 className="text-white font-medium mb-4">Services Available For</h3>
                   <ul className="space-y-2 text-gray-300">
@@ -239,3 +258,4 @@ const ContactSection = () => {
 };
 
 export default ContactSection;
+
